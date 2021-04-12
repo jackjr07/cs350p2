@@ -39,6 +39,7 @@ int * partSort(int arr[], int i, int partMax){
 }
 
 
+
 int sort(int z[], int leftest, int middle, int rightest){
     //#1 split into 2 group || n = 9 | 0 - 4 - 5 - 8
     int n1 = middle + 1; //z[0] to z[4]
@@ -57,11 +58,10 @@ int sort(int z[], int leftest, int middle, int rightest){
     //create result array and start sorting 
     int result[rightest];
     //I have n1, n2, left[], rigth[]
-    partSort(left, 0, n1);
-    partSort(right, 0, n2-1);
+    //partSort(left, 0, n1);
+    //partSort(right, 0, n2-1);
     int i,j,k;
     i = 0; j = 0; k=0;
-
 
     //Sorted arrange
     while (i < n1 && j < n2){
@@ -81,8 +81,19 @@ int sort(int z[], int leftest, int middle, int rightest){
         ++i; ++k;
     }
     while(j < n2){
-        result[k] = right[j];
+    result[k] = right[j];
         ++j; ++k;
+    }
+    cout << "@1" << endl;
+    printNums(result, rightest+1, 0);
+    int a = 0;
+    while(a < rightest){
+        if(result[a] > result[a+1]){
+            int temp = result[a];
+            result[a] = result[a+1];
+            result[a+1] = temp;
+        }
+        ++a;
     }
 
     printNums(result, rightest+1, 0);
