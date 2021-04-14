@@ -22,7 +22,6 @@ void printNums(int z[], int count, int i){
 int * copyArr(int arr[], int z[], int i, int j, int max){
     if(i > max) return arr; //Base case
         arr[i] = z[j];
-        //cout << arr[i] << endl;
         ++i;
         ++j;
     return copyArr(arr, z, i, j, max);
@@ -36,32 +35,71 @@ int swap(int * p1, int * p2){
     return 1;
 }
 
+int lastCheck(int z[]){
+    int len = sizeof(z)/sizeof(z[0]);
+    for(int i =0; i<len; ++i){
+        if(z[i] > z[i+1]) return 0;
+    }
+    return 1;
+}
+
 //Started the the leftest
     //35 97 99 48 12 27 103 14 32
     //curr = 35 | z[low+1] = 97 | z[hi] = 32
 int runSort(int z[], int low, int hi, int hold){
     cout << "hold: " << z[hold] << "low: " << z[low] << "hi: " << z[hi] << endl;
+    cout << "Index H: " << hi << "Index L: " << low << endl;
+    //All numbers all unique
     //base case
-    if(low == hi) return hold;
+    if(z[low] < z[hold]){
+        swap(z[low], z[hold]);
+        cout << "hold: " << z[hold] << "low: " << z[low] << "hi: " << z[hi] << endl;
+        return runSort(z, low, hi, hold);
+    }
+    if(z[low] > z[hold]){
+        if(z[hi] < z[hold]){
+            cout << "HIT" << endl;
+            swap(z[low], z[hi]);
+            cout << "hold: " << z[hold] << "low: " << z[low] << "hi: " << z[hi] << endl;
+            return runSort(z, ++low, --hi, hold);
+        }
+    } 
+    if(low == hi){
+        cout << "LOW = HI" << endl;
+        int check = lastCheck(z);
+        cout << check << endl;
+        if(check){
+            return check;
+        }else{
+            swap(z[low], z[hold]);
+            return runSort(z, 1, 4, ++hold);
+        }
+    }
+    /*
+    if(low == hi) {
+        //swap(z[low], z[hold]);
+        return 1;
+    };
     //The left side is greater than z[hold]
     if(z[low] > z[hold]) {
         //If the left side is less than z[hold] | In this case I want to swap with the Z[lo]
         if(z[hi] < z[hold]) {
+            cout << "Before: " << " H:" << z[hi] << " L:" << z[low] << endl;
             swap(z[hi], z[low]);
+            cout << "After: " << " H:" <<  z[hi] << " L:" << z[low] << endl;
             return runSort(z, ++low, --hi,hold);
         }
         return runSort(z, ++low, --hi,hold);
     }    
     if(z[low] < z[hold]){
-        cout << "Before: " << z[low] << z[hold] << endl;
-        swap(z[low], z[hold]);
-        cout << "After swap: " << z[low] << z[hold] << endl;
+        cout << "Before: " << " L:" << z[low] << " H:" << z[hi] << endl;
+        swap(z[low], z[hi]);
+        cout << "After: " <<" L:" <<  z[low] << " H:" <<  z[hi] << endl;
         return runSort(z, ++low, hi, hold);
     }
-    //Move the less than value from the right side
-    //if right side is greater than hold then swap between
-    //low and high
-    /*
+
+
+    //older
     if(z[hi] < z[hold]){
         swap(z[low], z[hi]);
         ++low; //2 from 1
@@ -82,18 +120,6 @@ int mysterySort(int z[],int low, int hi){
     printNums(z, hi+1, 0);
     runSort(z, low+1, hi, 0);
     printNums(z, hi+1, 0);
-    /*
-    if(low >= hi) {
-        cout << "Sorted ";
-        printNums(z, hi+1, 0);
-        return 2;
-    }
-    //35 97 99 48 12 27 103 14 32
-    //curr = 35 | z[low+1] = 97 | z[hi] = 32
-    int curr = runSort(z, low+1, hi, 0);
-    mysterySort(z, low, curr-1);
-    mysterySort(z, curr+1, hi);
-    */
 
     return 1;
 }
@@ -120,7 +146,7 @@ int main(){
 
     //leftest always is 0 || rightest is count -1 
     mysterySort(z, 0, count-1);
-
+    printNums(z, count, 0);
 
     return 0;
 }
